@@ -4,7 +4,7 @@ box::use(
   shiny[tabPanel, h3, p, fileInput, actionButton, NS, moduleServer, observeEvent, fluidRow, column, wellPanel, h4, uiOutput, renderUI, HTML, req, renderText, textOutput],
   DT[DTOutput, renderDT, datatable],
   ssh[ssh_exec_wait],
-  dplyr[inner_join, full_join,select, bind_rows, distinct_all, mutate_all, filter, rowwise, mutate, ungroup, mutate_at, vars, arrange,case_when],
+  dplyr[inner_join, full_join,select, bind_rows, distinct_all, mutate_all, filter, rowwise, mutate, ungroup, mutate_at, vars, arrange,case_when,across],
   readxl[read_xlsx],
   tibble[as_tibble, add_column, rowid_to_column],
   tidyselect[any_of],
@@ -103,7 +103,7 @@ server = function(id, sshSession, rvals, dir) {
             mutate_all(as.character) %>%
             inner_join(rvals$storageLocations),
           error = function(e) {
-            myNotification(paste("error in join:", e))
+            myNotification(paste("error in idno join:", e))
             return(NULL)
           }
         )
@@ -132,7 +132,7 @@ server = function(id, sshSession, rvals, dir) {
             mutate_all(as.character) %>%
             inner_join(rvals$storageLocations),
           error = function(e) {
-            myNotification(paste("error in join:", e))
+            myNotification(paste("error in building join:", e))
             return(NULL)
           }
         )
@@ -148,7 +148,7 @@ server = function(id, sshSession, rvals, dir) {
           ) %>%
           ungroup(),
         error = function(e) {
-          myNotification("error in join")
+          myNotification("error in results join")
           return(NULL)
         }
       )

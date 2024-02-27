@@ -8,15 +8,15 @@ box::use(
 )
 
 #' @export
-idno2storage = function(df) {
-  if (!"idno" %in% names(df))
+idno2storage = function(df, idno = 'idno') {
+  if (!idno %in% names(df))
     stop("No idno in storage locations")
   seps = c("_s", "_u", "_rw", "_rm")
   ids = c("shelf", "unit", "row", "room")
-  df %<>%
-    mutate(idnoTmp = idno)
+  df = df %>%
+    mutate(idnoTmp = !!as.name(idno))
   for (i in 1:length(seps)) {
-    df %<>%
+    df = df %>%
       separate(
         idnoTmp,
         into = c('idnoTmp', ids[i]),
@@ -24,7 +24,7 @@ idno2storage = function(df) {
         fill = "right"
       )
   }
-  df %<>%
+  df = df %>%
     mutate(idnoTmp = idnoTmp %>% str_remove_all("^b")) %>%
     rename(building = idnoTmp)
   return(df)
